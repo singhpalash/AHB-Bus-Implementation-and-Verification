@@ -1,8 +1,7 @@
 # AHB-Bus-Implementation-and-Verification
 Design and Implementation of AHB BUS 
 
-## Project Overview
-
+## 📌 Project Overview
  The primary goal of this project is to implement a fully functional AHB bus interface module that supports key AHB features such as:
 
  - Single, incrementing, and wrapping burst transfers
@@ -17,7 +16,7 @@ Design and Implementation of AHB BUS
 
  - The implementation is aimed at achieving a protocol-compliant, synthesizable RTL design suitable for FPGA or ASIC deployment.
 
-## Design Details
+##  🧩 Design Details
 
 - The AHB bus master and slave interfaces have been designed using SystemVerilog.
 
@@ -29,7 +28,7 @@ Design and Implementation of AHB BUS
 
 - The design has a single master and multislave architecture thus an interconnection has been added to select one slave out of multiple slaves
 
-## Verification Strategy
+## 🧪 Verification Strategy
 
 - The design is verified using a comprehensive UVM-based testbench environment.
 
@@ -42,6 +41,7 @@ Design and Implementation of AHB BUS
 - Simulation waveforms and logs confirm the design’s correctness and robustness across all tested cases.
 
 ## 📊 Coverages Checked
+
 <table style="border: 1px solid black; border-collapse: collapse;">
   <tr style="background-color: #cccccc;">
     <th style="border: 1px solid black; padding: 8px;">Covergroup</th>
@@ -119,5 +119,130 @@ Design and Implementation of AHB BUS
     <td style="border: 1px solid black; padding: 8px;">Valid combinations of asserted start and ready handshake</td>
   </tr>
 </table>
+
+## 🛡️ Assertion Checks
+
+<table border="1" cellspacing="0" cellpadding="6">
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>P1</td>
+    <td>When start is low, s_haddr should be zero.</td>
+  </tr>
+  <tr>
+    <td>P2</td>
+    <td>When start is low, s_hwdata should be zero.</td>
+  </tr>
+  <tr>
+    <td>P3</td>
+    <td>When start is low, o_hrdata should be zero.</td>
+  </tr>
+  <tr>
+    <td>P4</td>
+    <td>On rising edge of start, m_haddr should be ≤ 255 throughout the transfer.</td>
+  </tr>
+  <tr>
+    <td>P5</td>
+    <td>Only legal burst types (SINGLE or INCR, WRAP, etc.) are allowed.</td>
+  </tr>
+  <tr>
+    <td>P6</td>
+    <td>For i_hsize = 1, m_haddr increments by 1.</td>
+  </tr>
+  <tr>
+    <td>P7</td>
+    <td>For i_hsize = 2, m_haddr increments by 2.</td>
+  </tr>
+  <tr>
+    <td>P8</td>
+    <td>For i_hsize = 3, m_haddr increments by 4.</td>
+  </tr>
+  <tr>
+    <td>P9</td>
+    <td>If m_htrans is NONSEQ/SEQ and m_hwdata is valid, i_hwrite should be 1.</td>
+  </tr>
+  <tr>
+    <td>P10</td>
+    <td>Read output is stable for 4 cycles if ready and no write occurs.</td>
+  </tr>
+  <tr>
+    <td>P11</td>
+    <td>Reset condition sets m_haddr, m_hwdata, and o_hrdata to zero.</td>
+  </tr>
+  <tr>
+    <td>P12</td>
+    <td>During wait states, master signals must hold their values.</td>
+  </tr>
+  <tr>
+    <td>P13</td>
+    <td>Data read matches previously written data at the same address.</td>
+  </tr>
+  <tr>
+    <td>P14</td>
+    <td>For burst type 1, i_hwrite must remain stable during burst.</td>
+  </tr>
+  <tr>
+    <td>P15</td>
+    <td>For burst type 2, i_hwrite stable for 4+ cycles.</td>
+  </tr>
+  <tr>
+    <td>P16</td>
+    <td>Same as P15, for burst type 3.</td>
+  </tr>
+  <tr>
+    <td>P17</td>
+    <td>For burst type 4, i_hwrite stable for 8+ cycles.</td>
+  </tr>
+  <tr>
+    <td>P18</td>
+    <td>Same as P17, for burst type 5.</td>
+  </tr>
+  <tr>
+    <td>P19</td>
+    <td>For burst type 6, i_hwrite stable for 16+ cycles.</td>
+  </tr>
+  <tr>
+    <td>P20</td>
+    <td>Same as P19, for burst type 7.</td>
+  </tr>
+  <tr>
+    <td>P21–P26</td>
+    <td>For i_hsize=1 and burst types 1 to 7, m_haddr should increment correctly for each beat.</td>
+  </tr>
+  <tr>
+    <td>P27–P32</td>
+    <td>For i_hsize=2 and burst types 1 to 7, m_haddr should increment by 2 each beat.</td>
+  </tr>
+  <tr>
+    <td>P33–P38</td>
+    <td>For i_hsize=3 and burst types 1 to 7, m_haddr should increment by 4 each beat.</td>
+  </tr>
+  <tr>
+    <td>P39</td>
+    <td>m_haddr and i_hwdata stay stable when invalid burst.</td>
+  </tr>
+  <tr>
+    <td>P40</td>
+    <td>If i_hsize > 2, m_haddr becomes 'x' (invalid).</td>
+  </tr>
+</table>
+
+## 🛠️ Tools Used
+
+- Simulation: xsim
+
+- Synthesis: Vivado
+
+- Language: SystemVerilog
+
+## ▶️ How to Run
+
+- Run the simulation script provided in the sim folder to execute the testbench.
+
+- Check the waveform files and simulation logs for detailed signal behavior.
+
+- Use the provided testbench for further extension or integration into larger SoC environments.
 
 
