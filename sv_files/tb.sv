@@ -36,6 +36,7 @@ class transaction extends uvm_sequence_item;
   `uvm_field_int(i_hwdata,UVM_ALL_ON | UVM_BIN);
   `uvm_field_int(i_hburst,UVM_ALL_ON | UVM_BIN);
   `uvm_field_int(o_hrdata,UVM_ALL_ON | UVM_BIN);
+  `uvm_field_int(m_hready,UVM_ALL_ON | UVM_BIN);
   `uvm_object_utils_end
 
 
