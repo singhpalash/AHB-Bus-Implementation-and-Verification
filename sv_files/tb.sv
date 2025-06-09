@@ -298,7 +298,7 @@ class mon extends uvm_monitor;
    
    coverpoint tr.i_haddr{
     bins v_addr[]={[0:255]};
-    //bins inv_addr[]={[256:1024]};
+    bins inv_addr[]={[256:1024]};
    }
   
   coverpoint tr.i_hwrite{
