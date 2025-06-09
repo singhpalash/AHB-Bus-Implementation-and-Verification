@@ -154,7 +154,7 @@ module ahb_master(
           end 
           else begin
             // wrapping bursts
-            // wrapping logic explanation here https://chatgpt.com/share/68449566-42b0-8006-8304-c515d582fe61
+            
             base_addr  = o_haddr & ~(bound_val - 1);
             offset     = o_haddr - base_addr;
             new_offset = offset + inc;
