@@ -229,6 +229,10 @@ Design and Implementation of AHB BUS
   </tr>
 </table>
 
+##  📈 Coverage Result
+![image](https://github.com/user-attachments/assets/c9997b06-5ef7-4f39-bb1e-d6fed441b6ff)
+
+
 ## 🛠️ Tools Used
 
 - Simulation: xsim
