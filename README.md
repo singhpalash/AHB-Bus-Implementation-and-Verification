@@ -239,7 +239,7 @@ Design and Implementation of AHB BUS
 
 - Synthesis: Vivado
 
-- Language: SystemVerilog
+- Language: SystemVerilog,UVM
 
 ## ▶️ How to Run
 
