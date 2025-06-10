@@ -232,12 +232,6 @@ Design and Implementation of AHB BUS
      </tr>
    </table>
 
-##  📈 Functional Coverage Result
-![image](https://github.com/user-attachments/assets/c9997b06-5ef7-4f39-bb1e-d6fed441b6ff)
-
-## ✅ Code Coverage Result
-<img width="941" alt="image" src="https://github.com/user-attachments/assets/ea0937d3-f54f-419e-af5c-2c3482e7e989" />
-
 
 ## 🛠️ Tools Used
 
