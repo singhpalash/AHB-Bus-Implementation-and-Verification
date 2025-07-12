@@ -1,6 +1,15 @@
 # AHB-Bus-Implementation-and-Verification
 Design and Implementation of AHB BUS 
 
+## 🧾 Table of Contents
+1) Project Overview
+2) Design Details
+3) Verification Strategy
+4) Coverages Checked
+5) Assertion Checks
+6) Tools Used
+7) How to Run
+
 ## 📌 Project Overview
  The primary goal of this project is to implement a fully functional AHB bus interface module that supports key AHB features such as:
 
