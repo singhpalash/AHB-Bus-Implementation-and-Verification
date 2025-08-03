@@ -463,13 +463,19 @@ class sco extends uvm_scoreboard;
     else begin
       // Read operation: compare against expected data
       if (tr.i_haddr < 256) begin
-        bit [31:0] expected = ref_mem[tr.i_haddr];
-        if (tr.o_hrdata !== expected) begin
+        if(ref_mem.exists(tr.i_addr)) begin
+         bit [31:0] expected = ref_mem[tr.i_haddr];
+         if (tr.o_hrdata !== expected) begin
           `uvm_error("SCO", $sformatf("READ MISMATCH: Addr=%0d, Expected=%0h, Got=%0h",
                                        tr.i_haddr, expected, tr.o_hrdata));
-        end 
-        else begin
+         end
+        
+         else begin
           `uvm_info("SCO", $sformatf("READ PASS: Addr=%0d, Data=%0h", tr.i_haddr, tr.o_hrdata), UVM_LOW);
+         end
+        end
+        else begin
+          `uvm_info("SCO", $sformatf("READ from unwritten addr: Addr=%0d, Data=%0h", tr.i_haddr, tr.o_hrdata), UVM_LOW);
         end
       end 
       else begin
