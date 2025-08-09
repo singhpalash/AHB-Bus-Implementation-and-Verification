@@ -1,7 +1,7 @@
 # AHB-Bus-Implementation-and-Verification
 Design and Implementation of AHB BUS 
 
-## 🧾 Table of Contents
+##  Table of Contents
 1) Project Overview
 2) Design Details
 3) Verification Strategy
@@ -10,7 +10,7 @@ Design and Implementation of AHB BUS
 6) Tools Used
 7) How to Run
 
-## 📌 Project Overview
+##  Project Overview
  The primary goal of this project is to implement a fully functional AHB bus interface module that supports key AHB features such as:
 
  - Single, incrementing, and wrapping burst transfers
@@ -25,7 +25,7 @@ Design and Implementation of AHB BUS
 
  - The implementation is aimed at achieving a protocol-compliant, synthesizable RTL design suitable for FPGA or ASIC deployment.
 
-##  🧩 Design Details
+##   Design Details
 
 - The AHB bus master and slave interfaces have been designed using SystemVerilog.
 
@@ -37,7 +37,7 @@ Design and Implementation of AHB BUS
 
 - The design has a single master and multislave architecture thus an interconnection has been added to select one slave out of multiple slaves
 
-## 🧪 Verification Strategy
+##  Verification Strategy
 
 - The design is verified using a comprehensive UVM-based testbench environment.
 
@@ -51,7 +51,7 @@ Design and Implementation of AHB BUS
 
 
 
-## 📊 Coverages Checked
+##  Coverages Checked
 
   <table style="border: 1px solid black; border-collapse: collapse;">
     <tr style="background-color: #cccccc;">
@@ -132,7 +132,7 @@ Design and Implementation of AHB BUS
   </table>
 
 
-## 🛡️ Assertion Checks
+##  Assertion Checks
 
    <table border="1" cellspacing="0" cellpadding="6">
      <tr>
@@ -242,7 +242,7 @@ Design and Implementation of AHB BUS
    </table>
 
 
-## 🛠️ Tools Used
+##  Tools Used
 
 - Simulation: xsim
 
@@ -250,7 +250,7 @@ Design and Implementation of AHB BUS
 
 - Language: SystemVerilog,UVM
 
-## ▶️ How to Run
+##  How to Run
 
 - Run the simulation script provided in the sim folder to execute the testbench.
 
