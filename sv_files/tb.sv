@@ -603,7 +603,7 @@ module tb;
   // Instantiate interface
   ahb_top_i aif();
 
-  // Instantiate DUT and connect interface signals
+
   ahb_top dut (
     .clk      (aif.clk),
     .rst      (aif.rst),
@@ -614,7 +614,7 @@ module tb;
     .i_hwdata (aif.i_hwdata),
     .i_hburst (aif.i_hburst),
     .o_hrdata (aif.o_hrdata)
-    // Add other ports as needed
+    
   );
   
   bind ahb_top assertion_check assert_inst (
