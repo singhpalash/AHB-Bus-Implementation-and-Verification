@@ -203,45 +203,114 @@ property p40;
  (dut.m_hready and i_hsize>2 |=> dut.m_haddr==32'bx);
 endproperty
 
-A1:  assert property(p1)  else $error("P1 failed");
-A2:  assert property(p2)  else $error("P2 failed");
-A3:  assert property(p3)  else $error("P3 failed");
-A4:  assert property(p4)  else $error("P4 failed");
-A5:  assert property(p5)  else $error("P5 failed");
-A6:  assert property(p6)  else $error("P6 failed");
-A7:  assert property(p7)  else $error("P7 failed");
-A8:  assert property(p8)  else $error("P8 failed");
-A9:  assert property(p9)  else $error("P9 failed");
-A10: assert property(p10) else $error("P10 failed");
-A11: assert property(p11) else $error("P11 failed");
-A12: assert property(p12) else $error("P12 failed");
-A13: assert property(p13) else $error("P13 failed");
-A14: assert property(p14) else $error("P14 failed");
-A15: assert property(p15) else $error("P15 failed");
-A16: assert property(p16) else $error("P16 failed");
-A17: assert property(p17) else $error("P17 failed");
-A18: assert property(p18) else $error("P18 failed");
-A19: assert property(p19) else $error("P19 failed");
-A20: assert property(p20) else $error("P20 failed");
-A21: assert property(p21) else $error("P21 failed");
-A22: assert property(p22) else $error("P22 failed");
-A23: assert property(p23) else $error("P23 failed");
-A24: assert property(p24) else $error("P24 failed");
-A25: assert property(p25) else $error("P25 failed");
-A26: assert property(p26) else $error("P26 failed");
-A27: assert property(p27) else $error("P27 failed");
-A28: assert property(p28) else $error("P28 failed");
-A29: assert property(p29) else $error("P29 failed");
-A30: assert property(p30) else $error("P30 failed");
-A31: assert property(p31) else $error("P31 failed");
-A32: assert property(p32) else $error("P32 failed");
-A33: assert property(p33) else $error("P33 failed");
-A34: assert property(p34) else $error("P34 failed");
-A35: assert property(p35) else $error("P35 failed");
-A36: assert property(p36) else $error("P36 failed");
-A37: assert property(p37) else $error("P37 failed");
-A38: assert property(p38) else $error("P38 failed");
-A39: assert property(p39) else $error("P39 failed");
-A40: assert property(p40) else $error("P40 failed");
+property p41;
+  disable iff(!start)
+    (dut.m_htrans==dut.mm1.IDLE or
+     dut.m_htrans==dut.mm1.WAIT_S or
+     dut.m_htrans==dut.mm1.NONSEQ or
+     dut.m_htrans==dut.mm1.SEQ or
+     dut.m_htrans==dut.mm1.ERR_RESP);
+endproperty
+
+property p42;
+ disable iff(!start || !rst)
+ (!dut.m_hready throughout (dut.m_htrans!=dut.mm1.IDLE));
+endproperty
+
+property p43;
+  disable iff(!start)
+  ($stable({dut.m_haddr,dut.m_hwrite,dut.m_hsize,dut.m_hburst,dut.m_htrans}) throughout (!dut.m_hready));
+endproperty
+
+property p44;
+ disable iff(!start)
+ (!dut.m_hready |-> $stable(dut.m_hwdata) until_with  (!dut.m_hready[*]));
+ 
+endproperty
+
+property p45;
+  disable iff (!start)
+    (dut.m_hresp == dut.mm1.ERR_RESP) |=> (dut.m_htrans == dut.mm1.IDLE or dut.m_htrans == dut.mm1.ERR_RESP );
+endproperty
+
+property p46;
+  disable iff (!start)
+    (!dut.m_hready |-> 
+      ($stable(dut.m_haddr) and $stable(dut.m_hwrite) and $stable(dut.m_hsize) and
+       $stable(dut.m_hburst)  and
+       $stable(dut.m_htrans)) until dut.m_hready
+    );
+endproperty
+
+
+// Address must always be within base_addr to base_addr + bound_val - 1
+property p47;
+  @(posedge clk) disable iff (!rst && !start)
+    (dut.mm1.burst_q == dut.mm1.WRAP8) |-> ##[1:5](dut.m_haddr >= dut.mm1.base_addr && dut.m_haddr < dut.mm1.base_addr + dut.mm1.bound_val);
+endproperty
+
+
+
+
+
+
+
+
+
+
+
+
+A1:  assert property(p1) $info("succ at time %0t",$time); else $error("P1 failed");
+A2:  assert property(p2) $info("succ at time %0t",$time); else $error("P2 failed");
+A3:  assert property(p3) $info("succ at time %0t",$time); else $error("P3 failed");
+A4:  assert property(p4) $info("succ at time %0t",$time); else $error("P4 failed");
+A5:  assert property(p5) $info("succ at time %0t",$time); else $error("P5 failed");
+A6:  assert property(p6) $info("succ at time %0t",$time); else $error("P6 failed");
+A7:  assert property(p7) $info("succ at time %0t",$time); else $error("P7 failed");
+A8:  assert property(p8) $info("succ at time %0t",$time); else $error("P8 failed");
+A9:  assert property(p9) $info("succ at time %0t",$time); else $error("P9 failed");
+A10: assert property(p10)$info("succ at time %0t",$time); else $error("P10 failed");
+A11: assert property(p11)$info("succ at time %0t",$time); else $error("P11 failed");
+A12: assert property(p12)$info("succ at time %0t",$time); else $error("P12 failed");
+A13: assert property(p13)$info("succ at time %0t",$time); else $error("P13 failed");
+A14: assert property(p14)$info("succ at time %0t",$time); else $error("P14 failed");
+A15: assert property(p15)$info("succ at time %0t",$time); else $error("P15 failed");
+A16: assert property(p16)$info("succ at time %0t",$time); else $error("P16 failed");
+A17: assert property(p17)$info("succ at time %0t",$time); else $error("P17 failed");
+A18: assert property(p18)$info("succ at time %0t",$time); else $error("P18 failed");
+A19: assert property(p19)$info("succ at time %0t",$time); else $error("P19 failed");
+A20: assert property(p20)$info("succ at time %0t",$time); else $error("P20 failed");
+A21: assert property(p21)$info("succ at time %0t",$time); else $error("P21 failed");
+A22: assert property(p22)$info("succ at time %0t",$time); else $error("P22 failed");
+A23: assert property(p23)$info("succ at time %0t",$time); else $error("P23 failed");
+A24: assert property(p24)$info("succ at time %0t",$time); else $error("P24 failed");
+A25: assert property(p25)$info("succ at time %0t",$time); else $error("P25 failed");
+A26: assert property(p26)$info("succ at time %0t",$time); else $error("P26 failed");
+A27: assert property(p27)$info("succ at time %0t",$time); else $error("P27 failed");
+A28: assert property(p28)$info("succ at time %0t",$time); else $error("P28 failed");
+A29: assert property(p29)$info("succ at time %0t",$time); else $error("P29 failed");
+A30: assert property(p30)$info("succ at time %0t",$time); else $error("P30 failed");
+A31: assert property(p31)$info("succ at time %0t",$time); else $error("P31 failed");
+A32: assert property(p32)$info("succ at time %0t",$time); else $error("P32 failed");
+A33: assert property(p33)$info("succ at time %0t",$time); else $error("P33 failed");
+A34: assert property(p34)$info("succ at time %0t",$time); else $error("P34 failed");
+A35: assert property(p35)$info("succ at time %0t",$time); else $error("P35 failed");
+A36: assert property(p36)$info("succ at time %0t",$time); else $error("P36 failed");
+A37: assert property(p37)$info("succ at time %0t",$time); else $error("P37 failed");
+A38: assert property(p38)$info("succ at time %0t",$time); else $error("P38 failed");
+A39: assert property(p39)$info("succ at time %0t",$time); else $error("P39 failed");
+A40: assert property(p40)$info("succ at time %0t",$time); else $error("P40 failed");
+A41: assert property(p41)$info("succ at time %0t",$time); else $error("P41 failed");
+A42: assert property(p42)$info("succ at time %0t",$time); else $error("P42 failed");
+A43: assert property(p43)$info("succ at time %0t",$time); else $error("P43 failed");
+A44: assert property(p44)$info("succ at time %0t",$time); else $error("P44 failed");
+A45: assert property(p45)$info("succ at time %0t",$time); else $error("P45 failed");
+A46: assert property(p46)$info("succ at time %0t",$time); else $error("P46 failed");
+A47: assert property(p47)$info("succ at time %0t",$time); else $error("P47 failed");
+
+
+
+
+
 
 endmodule
