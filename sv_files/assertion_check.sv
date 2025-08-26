@@ -246,7 +246,7 @@ endproperty
 // Address must always be within base_addr to base_addr + bound_val - 1
 property p47;
   @(posedge clk) disable iff (!rst && !start)
-    (dut.mm1.burst_q == dut.mm1.WRAP8) |-> ##[1:5](dut.m_haddr >= dut.mm1.base_addr && dut.m_haddr < dut.mm1.base_addr + dut.mm1.bound_val);
+    (dut.mm1.burst_q == dut.mm1.WRAP8) |->((dut.m_haddr >= dut.mm1.base_addr && dut.m_haddr < dut.mm1.base_addr + dut.mm1.bound_val)[*5]);
 endproperty
 
 
