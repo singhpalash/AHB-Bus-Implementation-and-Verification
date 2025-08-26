@@ -1,6 +1,4 @@
 `timescale 1ns / 1ps
-
-// AHB-lite master with user's signal names, supporting single, incrementing, and wrapping bursts
 module ahb_master(
   input  logic             i_hclk,      // bus clock
   input  logic             i_hreset,    // active-low reset
@@ -25,7 +23,7 @@ module ahb_master(
 
   // transfer types
   localparam IDLE   = 3'b000;
-  localparam WAIT_S=3'b001;
+  localparam WAIT_S=  3'b001;
   localparam NONSEQ = 3'b010;
   localparam SEQ    = 3'b011;
   localparam ERR_RESP=3'b100;
@@ -74,14 +72,29 @@ module ahb_master(
   // Next state logic
   always_comb begin
     unique case (state)
-      IDLE:   next_state = start_q ? (i_hready ? NONSEQ : WAIT_S) : ((i_hresp && !i_hready)?ERR_RESP:(i_hready?IDLE:ERR_RESP));
-      WAIT_S: next_state = i_hready ? NONSEQ : WAIT_S;
-      NONSEQ: next_state = i_hready ? (burst_q==SINGLE ? IDLE : SEQ) : NONSEQ;
-      SEQ:    next_state = i_hready ? (beat_cnt>0 ? SEQ : IDLE) : SEQ;
-      ERR_RESP: next_state= !i_hresp ? (IDLE): ERR_RESP;
-      default: next_state = IDLE;
+      IDLE:   
+        next_state = start_q ? NONSEQ : IDLE;
+
+      WAIT_S: 
+        next_state = (i_hresp && !i_hready) ? ERR_RESP :
+                     (i_hready ? SEQ : WAIT_S);
+
+      NONSEQ: 
+        next_state = (i_hresp && !i_hready) ? ERR_RESP :
+                     (i_hready ? (burst_q==SINGLE ? IDLE : SEQ) : NONSEQ);
+
+      SEQ:    
+        next_state = (i_hresp && !i_hready) ? ERR_RESP :
+                     (i_hready ? (beat_cnt>0 ? SEQ : IDLE) : WAIT_S);
+
+      ERR_RESP: 
+        next_state = (i_hready && i_hresp) ? IDLE : ERR_RESP;
+
+      default: 
+        next_state = IDLE;
     endcase
-  end
+end
+
 
   // Compute boundary (combinational)
   always_comb begin
@@ -113,7 +126,11 @@ module ahb_master(
       burst_q    <= SINGLE;
       beat_cnt   <= 4'd0;
       read_flag  <= 1'b0;
-    end else begin
+    end
+    else if (!start_q) begin
+     o_htrans <= IDLE;
+    end
+     else begin
       o_htrans <= state;
       unique case (state)
         IDLE: if (start_q) begin
@@ -154,7 +171,6 @@ module ahb_master(
           end 
           else begin
             // wrapping bursts
-            
             base_addr  = o_haddr & ~(bound_val - 1);
             offset     = o_haddr - base_addr;
             new_offset = offset + inc;
@@ -163,7 +179,7 @@ module ahb_master(
             next_addr = base_addr + new_offset;
           end
           o_haddr  <= next_addr;
-          beat_cnt <= beat_cnt - 1;
+          beat_cnt  <= beat_cnt - 1;
         end
       ERR_RESP: begin
        o_haddr <= 32'd0;
