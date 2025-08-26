@@ -46,36 +46,14 @@ endclass
 
 class gen_w extends uvm_sequence#(transaction);
  `uvm_object_utils(gen_w);
- typedef bit[31:0] addr_t;
- typedef addr_t addr_q_t[$]; // Queue of burst_t
 
- typedef bit[2:0] size_t;
- typedef size_t size_q_t[$]; // Queue of burst_t
-
- typedef bit[2:0] burst_t;
- typedef burst_t burst_q_t[$]; // Queue of burst_t
-  
- 
-
-  addr_q_t addr_q;
-  size_q_t size_q ;
-  burst_q_t burst_q ;
 // transaction tr;
  
  function new(string path="gw");
   super.new(path);
  endfunction
  
- virtual task pre_body();
-    //super.pre_body();
-    // Get shared queue from config DB
-   uvm_config_db#(addr_q_t)::set(null, "*", "addr_q", addr_q);
-      `uvm_fatal("GEN_W", "Could not get shared addr_q");
-   uvm_config_db#(size_q_t)::set(null, "*", "size_q", size_q);
-      `uvm_fatal("GEN_W", "Could not get shared size_q");
-   uvm_config_db#(burst_q_t)::set(null, "*", "burst_q", burst_q);
-      `uvm_fatal("GEN_W", "Could not get shared burst_q");
- endtask
+
  
 virtual task body();
   repeat (15) begin
@@ -98,20 +76,17 @@ virtual task body();
     tr1.start = 1'b1;
     tr1.i_hwrite = 1'b1;
     assert(tr1.randomize());
-    addr_q.push_back(tr1.i_haddr);
-    size_q.push_back(tr1.i_hsize);
-    burst_q.push_back(tr1.i_hburst);
     finish_item(tr1);
 
 
     // Delay based on tr1's burst type
     case (tr1.i_hburst)
-      3'd0:        #10;
-      3'd2, 3'd3:  #40;
-      3'd4, 3'd5:  #80;
+      3'd0:        #20;
+      3'd2, 3'd3:  #80;
+      3'd4, 3'd5:  #160;
 //      3'd6, 3'd7:  #160;
       3'd6, 3'd7:  #320;
-      default:     #10;
+      default:     #20;
     endcase
   end
 endtask
@@ -129,7 +104,7 @@ class gen_werr extends uvm_sequence#(transaction);
  endfunction
  
 virtual task body();
-  repeat (15) begin
+  repeat (128) begin
     transaction tr0, tr1;
 
     // First transaction: start = 0
@@ -154,11 +129,11 @@ virtual task body();
 
     // Delay based on tr1's burst type
     case (tr1.i_hburst)
-      3'd0:        #10;
-      3'd2, 3'd3:  #40;
-      3'd4, 3'd5:  #80;
-      3'd6, 3'd7:  #160;
-      default:     #10;
+      3'd0:        #20;
+      3'd2, 3'd3:  #80;
+      3'd4, 3'd5:  #160;
+      3'd6, 3'd7:  #320;
+      default:     #20;
     endcase
   end
 endtask
@@ -170,18 +145,7 @@ endclass
 
 class gen_r extends uvm_sequence#(transaction);
  `uvm_object_utils(gen_r);
- typedef bit[31:0] addr_t;
- typedef addr_t addr_q_t[$]; // Queue of burst_t
-
- typedef bit[2:0] size_t;
- typedef size_t size_q_t[$]; // Queue of burst_t
-
- typedef bit[2:0] burst_t;
- typedef burst_t burst_q_t[$]; // Queue of burst_t
-
-  addr_q_t addr_q;
-  size_q_t size_q ;
-  burst_q_t burst_q ;
+ 
   
 // transaction tr;
  
@@ -189,23 +153,12 @@ class gen_r extends uvm_sequence#(transaction);
   super.new(path);
  endfunction
 
-virtual task pre_body();
-   // super.pre_body();
-  if (!uvm_config_db#(addr_q_t)::get(null, "*", "addr_q", addr_q))
-      `uvm_fatal("GEN_R", "Could not get shared addr_q");
-  if (!uvm_config_db#(size_q_t)::get(null, "*", "size_q", size_q))
-      `uvm_fatal("GEN_R", "Could not get shared size_q");
-  if (!uvm_config_db#(burst_q_t)::get(null, "*", "burst_q", burst_q))
-      `uvm_fatal("GEN_R", "Could not get shared burst_q");
-endtask
+
  
 virtual task body();
   repeat (15) begin
     transaction tr0, tr1;
-    if (addr_q.size() == 0) begin
-        `uvm_warning("GEN_R", "No address to read from");
-        break;
-    end
+   
 
     // First transaction: start = 0
     tr0 = transaction::type_id::create("tr0");
@@ -224,18 +177,18 @@ virtual task body();
     tr1.start = 1'b1;
     tr1.i_hwrite = 1'b0;
 //    assert(tr1.randomize());
-    tr1.i_hburst=burst_q.pop_front();
-    tr1.i_haddr=addr_q.pop_front();
-    tr1.i_hsize=size_q.pop_front();
+    assert(tr1.i_hburst.randomize());
+    assert(tr1.i_haddr.randomize());
+    assert(tr1.i_hsize.randomize());
     finish_item(tr1);
 
     // Delay based on tr1's burst type
     case (tr1.i_hburst)
-      3'd0:        #10;
-      3'd2, 3'd3:  #40;
-      3'd4, 3'd5:  #80;
-      3'd6, 3'd7:  #160;
-      default:     #10;
+      3'd0:        #20;
+      3'd2, 3'd3:  #80;
+      3'd4, 3'd5:  #160;
+      3'd6, 3'd7:  #320;
+      default:     #20;
     endcase
   end
 endtask
@@ -253,7 +206,7 @@ class gen_rerr extends uvm_sequence#(transaction);
  endfunction
  
 virtual task body();
-  repeat (15) begin
+  repeat (128) begin
     transaction tr0, tr1;
 
     // First transaction: start = 0
@@ -275,11 +228,11 @@ virtual task body();
 
     // Delay based on tr1's burst type
     case (tr1.i_hburst)
-      3'd0:        #10;
-      3'd2, 3'd3:  #40;
-      3'd4, 3'd5:  #80;
-      3'd6, 3'd7:  #160;
-      default:     #10;
+      3'd0:        #20;
+      3'd2, 3'd3:  #80;
+      3'd4, 3'd5:  #160;
+      3'd6, 3'd7:  #320;
+      default:     #20;
     endcase
   end
 endtask
@@ -349,7 +302,7 @@ class mon extends uvm_monitor;
   virtual ahb_top_i aif;
   
   
-  covergroup cia ;
+ covergroup cia ;
    option.per_instance=1;
    
    coverpoint tr.rst {
@@ -407,7 +360,7 @@ class mon extends uvm_monitor;
   cross_illegal_burst: cross tr.i_hburst,tr.start,tr.m_hready{
    ignore_bins leg_burst=binsof(tr.i_hburst)intersect{0,[2:7]};
    ignore_bins strt_high=binsof(tr.start)intersect{0};
-   ignore_bins rdy=binsof(tr.m_hready)intersect{1};
+   ignore_bins rdy=binsof(tr.m_hready)intersect{0};
   }
   
   cross_illegal_tx: cross tr.i_haddr,tr.start,tr.m_hready {
@@ -420,24 +373,24 @@ class mon extends uvm_monitor;
   cross_legal_burst: cross tr.i_hburst,tr.start,tr.m_hready{
    ignore_bins leg_burst=binsof(tr.i_hburst)intersect{1};
    ignore_bins strt_high=binsof(tr.start)intersect{0};
-   ignore_bins rdy=binsof(tr.m_hready)intersect{1};
+   ignore_bins rdy=binsof(tr.m_hready)intersect{0};
   }
   
   cross_legal_tx: cross tr.i_haddr,tr.start,tr.m_hready {
    ignore_bins strt_high=binsof(tr.start)intersect{0};
    ignore_bins addr=binsof(tr.i_haddr)intersect{[256:$]};
-   ignore_bins rdy=binsof(tr.m_hready)intersect{1};
+   ignore_bins rdy=binsof(tr.m_hready)intersect{0};
   }
   
   cross_illegal_ready: cross tr.start,tr.m_hready {
   ignore_bins strt_high=binsof(tr.start)intersect{0};
-  ignore_bins rdy=binsof(tr.m_hready)intersect{0};
+  ignore_bins rdy=binsof(tr.m_hready)intersect{1};
   
   }
   
   cross_legal_ready: cross tr.start,tr.m_hready {
   ignore_bins strt_high=binsof(tr.start)intersect{0};
-  ignore_bins rdy=binsof(tr.m_hready)intersect{1};
+  ignore_bins rdy=binsof(tr.m_hready)intersect{0};
   
   }
   
@@ -445,6 +398,7 @@ class mon extends uvm_monitor;
   
  endgroup
  
+
  
  
   
@@ -527,6 +481,7 @@ class sco extends uvm_scoreboard;
       // Write operation: store data into reference model
       if (tr.i_haddr < 256) begin
         ref_mem[tr.i_haddr] = tr.i_hwdata;
+       
         `uvm_info("SCO", $sformatf("WRITE: Addr=%0d, Data=%0h", tr.i_haddr, tr.i_hwdata), UVM_NONE);
       end else begin
         `uvm_warning("SCO", $sformatf("WRITE to invalid address: %0d", tr.i_haddr));
