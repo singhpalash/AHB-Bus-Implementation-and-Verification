@@ -169,7 +169,7 @@ Design and Implementation of AHB BUS
   <tr><td>P43</td><td>All address/control signals must remain stable while m_hready is low.</td></tr>
   <tr><td>P44</td><td>If m_hready is low during a transfer, m_hwdata must remain stable until m_hready is high.</td></tr>
   <tr><td>P45</td><td>If hresp is ERROR or RETRY, master must not proceed to next transfer until handling is complete.</td></tr>
-  <tr><td>P46</td><td>During wait states, master signals must hold their previous values until ready.</td></tr>
+  <tr><td>P46</td><td>Master signals must hold their previous values until ready is high.</td></tr>
   <tr><td>P47</td><td>Address must wrap correctly for WRAP bursts (WRAP4, WRAP8, WRAP16).</td></tr>
 </table>
 
