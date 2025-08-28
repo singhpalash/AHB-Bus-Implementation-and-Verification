@@ -148,7 +148,7 @@ Design and Implementation of AHB BUS
   <tr><td>P7</td><td>For i_hsize = 2, m_haddr increments by 2.</td></tr>
   <tr><td>P8</td><td>For i_hsize = 3, m_haddr increments by 4.</td></tr>
   <tr><td>P9</td><td>If m_htrans is NONSEQ/SEQ and m_hwdata is valid, i_hwrite should be 1.</td></tr>
-  <tr><td>P10</td><td>Read output is stable for 4 cycles if ready and no write occurs.</td></tr>
+  <tr><td>P10</td><td>Address and Read output is stable for 4 cycles if ready goes low and remains stable until until ready is high.</td></tr>
   <tr><td>P11</td><td>Reset condition sets m_haddr, m_hwdata, and o_hrdata to zero.</td></tr>
   <tr><td>P12</td><td>During wait states, master signals must hold their values.</td></tr>
   <tr><td>P13</td><td>Data read matches previously written data at the same address.</td></tr>
