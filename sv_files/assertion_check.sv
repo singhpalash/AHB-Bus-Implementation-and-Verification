@@ -50,12 +50,12 @@ endproperty
 property p9;
   
   disable iff (!rst)
-  (dut.m_htrans inside {2'b10, 2'b11} and dut.m_hready and dut.m_hwdata != 32'd0) |-> i_hwrite;
+    (dut.m_htrans inside {2'b10, 2'b11} and dut.m_hready and dut.m_hwdata != 32'd0) |-> i_hwrite;
 endproperty
 
 
 property p10;
- (dut.m_hready and i_hwrite==0 and dut.m_htrans inside {2'b10,2'b11} |-> ##4 ($stable(o_hrdata) throughout $stable(i_haddr)) );
+    (dut.m_hready && !i_hwrite && dut.m_htrans inside {2'b01,2'b10}) |-> ($stable(dut.o_haddr) && $stable(o_hrdata) ) throughout (!dut.m_hready[*1:$] ##1 dut.m_hready)
 endproperty
 
 //reset functionality
@@ -80,39 +80,39 @@ endproperty
 //Assert that no read is attempted before the corresponding write completes
 //for checking same on write just copy paste and replace i_hwrite with i_hread
 property p14;
-   (dut.m_hready and i_hwrite and i_hburst==1 |-> $stable(i_hwrite )[*1:$] );
+    (dut.m_hready and i_hwrite and i_hburst==1 |-> $stable(i_hwrite )[*2] );
 
 endproperty
 
 property p15;
-   (dut.m_hready and i_hwrite and i_hburst==2 |-> $stable(i_hwrite)[*4:$] );
+    (dut.m_hready and i_hwrite and i_hburst==2 |-> $stable(i_hwrite)[*8] );
 
 endproperty
 
 
 property p16;
-   (dut.m_hready and i_hwrite and i_hburst==3 |-> $stable(i_hwrite)[*4:$] );
+    (dut.m_hready and i_hwrite and i_hburst==3 |-> $stable(i_hwrite)[*8] );
 
 endproperty
 
 
 property p17;
-   (dut.m_hready and i_hwrite and i_hburst==4 |-> $stable(i_hwrite)[*8:$] );
+    (dut.m_hready and i_hwrite and i_hburst==4 |-> $stable(i_hwrite)[*16] );
 
 endproperty
 
 property p18;
-   (dut.m_hready and i_hwrite and i_hburst==5 |-> $stable(i_hwrite)[*8:$] );
+    (dut.m_hready and i_hwrite and i_hburst==5 |-> $stable(i_hwrite)[*16] );
 
 endproperty
 
 property p19;
-   (dut.m_hready and i_hwrite and i_hburst==6 |-> $stable(i_hwrite )[*16:$] );
+    (dut.m_hready and i_hwrite and i_hburst==6 |-> $stable(i_hwrite )[*32] );
 
 endproperty
 
 property p20;
-   (dut.m_hready and i_hwrite and i_hburst==7 |-> $stable(i_hwrite)[*16:$] );
+    (dut.m_hready and i_hwrite and i_hburst==7 |-> $stable(i_hwrite)[*32] );
 
 endproperty
 
@@ -230,7 +230,7 @@ endproperty
 
 property p45;
   disable iff (!start)
-    (dut.m_hresp == dut.mm1.ERR_RESP) |=> (dut.m_htrans == dut.mm1.IDLE or dut.m_htrans == dut.mm1.ERR_RESP );
+    (dut.m_hresp) |=> (dut.m_htrans == dut.mm1.IDLE or dut.m_htrans == dut.mm1.ERR_RESP );
 endproperty
 
 property p46;
