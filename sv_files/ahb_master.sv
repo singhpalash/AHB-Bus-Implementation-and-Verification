@@ -163,8 +163,8 @@ end
         SEQ: if (i_hready) begin
           // compute increment
           o_hwdata <= i_hwdata; 
-          inc = (i_hsize==3'b010) ? 4 :
-                ((i_hsize==3'b001) ? 2 : 1);
+          inc = (i_hsize==3'b011) ? 4 :
+          ((i_hsize==3'b010) ? 2 : 1);
           // incrementing bursts
           if (burst_q==INCR4||burst_q==INCR8||burst_q==INCR16) begin
             next_addr = o_haddr + inc;
