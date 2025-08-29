@@ -105,9 +105,9 @@ end
       default:         beats = 1;
     endcase
     unique case (i_hsize)
-      3'b000: bytes = 1;
-      3'b001: bytes = 2;
-      3'b010: bytes = 4;
+      3'b001: bytes = 1;
+      3'b010: bytes = 2;
+      3'b011: bytes = 4;
       default: bytes = 1;
     endcase
     bound_val = beats * bytes;
@@ -164,7 +164,7 @@ end
           // compute increment
           o_hwdata <= i_hwdata; 
           inc = (i_hsize==3'b011) ? 4 :
-          ((i_hsize==3'b010) ? 2 : 1);
+          ((i_hsize==3'b010) ? 2 : (i_hsize==3'b001? 1 : 0));
           // incrementing bursts
           if (burst_q==INCR4||burst_q==INCR8||burst_q==INCR16) begin
             next_addr = o_haddr + inc;
