@@ -8,7 +8,7 @@ module ahb_slave #(
     input  wire        HSEL,      // Slave select (active high)
     // AHB Slave interface signals
     input  wire [31:0] HADDR,
-    input  wire [2:0]  HTRANS,    // 2'b00: IDLE, 2'b01: BUSY, 2'b10: NONSEQ, 2'b11: SEQ
+    input  wire [1:0]  HTRANS,    // 2'b00: IDLE, 2'b01: BUSY, 2'b10: NONSEQ, 2'b11: SEQ
     input  wire [2:0]  HBURST,    // Not used here, but provided
     input  wire [2:0]  HSIZE,     // e.g., 3'b010 for 32-bit transfer
     input  wire        HWRITE,    // 1: Write, 0: Read
@@ -61,11 +61,11 @@ module ahb_slave #(
       latched_addr   <= 32'd0;
       latched_HWRITE <= 1'b0;
       latched_HWDATA <= 32'd0;
-      latched_HTRANS <= 2'b00;
+      latched_HTRANS <= 3'b000;
     end
     // Only latch when HSEL is asserted, HREADY is high,
     // and the transfer is NONSEQ or SEQ (ignore BUSY and IDLE).
-    else if (HSEL && HREADY && ((HTRANS == 2'b10) || (HTRANS == 2'b11))) begin
+      else if (HSEL && HREADY && ((HTRANS == 3'b010) || (HTRANS == 3'b011))) begin
       latched_addr   <= HADDR;
       latched_HWRITE <= HWRITE;
       latched_HWDATA <= HWDATA;
@@ -89,10 +89,10 @@ module ahb_slave #(
     case (state)
       SL_IDLE: begin
         // If a valid transfer occurs (NONSEQ or SEQ) and not BUSY, go to wait state.
-        if (HSEL && HREADY && ((HTRANS == 2'b10) || (HTRANS == 2'b11)))
+          if (HSEL && HREADY && ((HTRANS == 3'b010) || (HTRANS == 3'b011)))
           next_state = SL_WAIT;
         // For BUSY transfers, just ignore (remain in idle with immediate OKAY response).
-        else if (HTRANS == 2'b01 || HTRANS == 2'b00)
+          else if (HTRANS == 3'b010 || HTRANS == 3'b000)
           next_state = SL_IDLE;
       end
 
