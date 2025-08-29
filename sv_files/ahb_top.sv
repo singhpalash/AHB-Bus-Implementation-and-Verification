@@ -170,6 +170,6 @@ interface ahb_top_i;
     logic [2:0] i_hburst;
     logic [31:0] o_hrdata;
     logic m_hready;
-
+    logic [31:0] m_haddr;
 
 endinterface
