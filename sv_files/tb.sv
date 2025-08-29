@@ -12,6 +12,7 @@ class transaction extends uvm_sequence_item;
   rand logic [2:0] i_hburst;
   logic [31:0] o_hrdata;
   logic m_hready;
+  logic [31:0] m_haddr;
   
   constraint size_t { i_hsize>=0;i_hsize<3 ;}
   constraint burst_t {
@@ -428,7 +429,7 @@ class mon extends uvm_monitor;
    forever begin
     @(posedge aif.clk)
      `uvm_info("MON",$sformatf("MON values %0d %0d %0d",aif.i_hwdata,aif.i_haddr,aif.i_hwrite),UVM_NONE);
-      if(aif.rst) begin
+      if(aif.rst && aif.m_hready) begin
         tr.start<=aif.start;
         tr.i_haddr<=aif.i_haddr;
         tr.i_hwrite<=aif.i_hwrite;
@@ -436,6 +437,8 @@ class mon extends uvm_monitor;
         tr.i_hwdata<=aif.i_hwdata;
         tr.i_hburst<=aif.i_hburst;
         tr.o_hrdata<=aif.o_hrdata;
+        tr.m_hready <= aif.m_hready;
+        tr.m_haddr <= aif.m_haddr;
         cia.sample();
         snd.write(tr);
       end
@@ -479,8 +482,8 @@ class sco extends uvm_scoreboard;
 
     if (tr.i_hwrite) begin
       // Write operation: store data into reference model
-      if (tr.i_haddr < 256) begin
-        ref_mem[tr.i_haddr] = tr.i_hwdata;
+      if (tr.m_haddr < 256) begin
+        ref_mem[tr.m_haddr] = tr.i_hwdata;
        
         `uvm_info("SCO", $sformatf("WRITE: Addr=%0d, Data=%0h", tr.i_haddr, tr.i_hwdata), UVM_NONE);
       end else begin
@@ -489,8 +492,8 @@ class sco extends uvm_scoreboard;
     end 
     else begin
       // Read operation: compare against expected data
-      if (tr.i_haddr < 256) begin
-        bit [31:0] expected = ref_mem[tr.i_haddr];
+      if (tr.m_haddr < 256) begin
+        bit [31:0] expected = ref_mem[tr.m_haddr];
         if (tr.o_hrdata !== expected) begin
           `uvm_error("SCO", $sformatf("READ MISMATCH: Addr=%0d, Expected=%0h, Got=%0h",
                                        tr.i_haddr, expected, tr.o_hrdata));
@@ -603,7 +606,7 @@ module tb;
   // Instantiate interface
   ahb_top_i aif();
 
-
+  // Instantiate DUT and connect interface signals
   ahb_top dut (
     .clk      (aif.clk),
     .rst      (aif.rst),
@@ -614,7 +617,7 @@ module tb;
     .i_hwdata (aif.i_hwdata),
     .i_hburst (aif.i_hburst),
     .o_hrdata (aif.o_hrdata)
-    
+    // Add other ports as needed
   );
   
   bind ahb_top assertion_check assert_inst (
@@ -630,6 +633,7 @@ module tb;
 );
 
  assign aif.m_hready=dut.m_hready;
+ assign aif.m_haddr=dut.m_haddr;
   // Clock generation
   initial begin
     aif.clk = 0;
