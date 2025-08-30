@@ -119,83 +119,83 @@ endproperty
 //Assert that the number of beats matches the burst type (e.g., INCR4 does 4 beats) 
 //also checks that the addr is incrementing according to size
 property p21;
-    (dut.m_hready and i_hburst==1 and i_hsize==1|-> (dut.m_haddr==$past(dut.m_haddr+1))[*2]);
+    (dut.m_hready and i_hburst==1 and i_hsize==1|-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*2]);
 endproperty
 
 property p22;
-    (dut.m_hready and i_hburst==2 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1))[*8]);
+    (dut.m_hready and i_hburst==2 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*8]);
 endproperty
 
 property p23;
-    (dut.m_hready and i_hburst==3 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1))[*8]);
+    (dut.m_hready and i_hburst==3 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*8]);
 endproperty
 
 property p24;
-    (dut.m_hready and i_hburst==4 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1))[*16]);
+    (dut.m_hready and i_hburst==4 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*16]);
 endproperty
 
 property p25;
-    (dut.m_hready and i_hburst==5 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1))[*16]);
+    (dut.m_hready and i_hburst==5 and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*16]);
 endproperty
 
 property p26;
-    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1))[*32]);
+    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==1 |-> (dut.m_haddr==$past(dut.m_haddr+1,2))[*32]);
 endproperty
 
 //for i_hsize=2
 property p27;
-    (dut.m_hready and i_hburst==1 and i_hsize==2|-> (dut.m_haddr==$past(dut.m_haddr+2))[*2]);
+    (dut.m_hready and i_hburst==1 and i_hsize==2|-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*2]);
 endproperty
 
 property p28;
-    (dut.m_hready and i_hburst==2 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2))[*8]);
+    (dut.m_hready and i_hburst==2 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*8]);
 endproperty
 
 property p29;
-    (dut.m_hready and i_hburst==3 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2))[*8]);
+    (dut.m_hready and i_hburst==3 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*8]);
 endproperty
 
 property p30;
-    (dut.m_hready and i_hburst==4 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2))[*16]);
+    (dut.m_hready and i_hburst==4 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*16]);
 endproperty
 
 property p31;
-    (dut.m_hready and i_hburst==5 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2))[*16]);
+    (dut.m_hready and i_hburst==5 and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*16]);
 endproperty
 
 property p32;
-    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2))[*32]);
+    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==2 |-> (dut.m_haddr==$past(dut.m_haddr+2,2))[*32]);
 endproperty
 
 //for i_hsize==3
 
 property p33;
-    (dut.m_hready and i_hburst==1 and i_hsize==3|-> (dut.m_haddr==$past(dut.m_haddr+4))[*2]);
+    (dut.m_hready and i_hburst==1 and i_hsize==3|-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*2]);
 endproperty
 
 property p34;
-    (dut.m_hready and i_hburst==2 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4))[*8]);
+    (dut.m_hready and i_hburst==2 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*8]);
 endproperty
 
 property p35;
-    (dut.m_hready and i_hburst==3 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4))[*8]);
+    (dut.m_hready and i_hburst==3 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*8]);
 endproperty
 
 property p36;
-    (dut.m_hready and i_hburst==4 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4))[*16]);
+    (dut.m_hready and i_hburst==4 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*16]);
 endproperty
 
 property p37;
-    (dut.m_hready and i_hburst==5 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4))[*16]);
+    (dut.m_hready and i_hburst==5 and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*16]);
 endproperty
 
 property p38;
-    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4))[*32]);
+    (dut.m_hready and (i_hburst==6 or i_hburst==7) and i_hsize==3 |-> (dut.m_haddr==$past(dut.m_haddr+4,2))[*32]);
 endproperty
 
 //address holds it previous value on invalid burst value
 property p39;
- (dut.m_hready and i_hburst==1 and i_hwrite|-> $stable(dut.m_haddr) and $stable(i_hwdata) );
+    (dut.m_hready and i_hburst==1 and i_hwrite|-> $stable(dut.m_haddr) and $stable(i_hwdata) );
 endproperty
 
 
