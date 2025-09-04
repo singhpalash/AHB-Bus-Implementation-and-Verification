@@ -647,12 +647,12 @@ module tb;
     // Set virtual interface for UVM components with the name "aif"
     uvm_config_db#(virtual ahb_top_i)::set(null, "*", "aif", aif);
 
-    // Run UVM test named "test" (your test class name)
+    
     run_test("test");
   end
   initial begin
-   $dumpfile("waveform.vcd");   // Name of the VCD output file
-   $dumpvars(0, tb);            // Dumps all variables under 'tb' hierarchy
+   $dumpfile("waveform.vcd");   
+   $dumpvars(0, tb);            
   end
 
 
