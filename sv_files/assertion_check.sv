@@ -200,7 +200,7 @@ endproperty
 
 
 property p40;
- (dut.m_hready and i_hsize>2 |=> dut.m_haddr==32'bx);
+    (dut.m_hready and i_hsize>3 |=> dut.m_haddr==32'bx);
 endproperty
 
 property p41;
