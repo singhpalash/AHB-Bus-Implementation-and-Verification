@@ -163,7 +163,7 @@ Design and Implementation of AHB BUS
   <tr><td>P27–P32</td><td>For i_hsize=2 and burst types 1 to 7, m_haddr should increment by 2 each beat.</td></tr>
   <tr><td>P33–P38</td><td>For i_hsize=3 and burst types 1 to 7, m_haddr should increment by 4 each beat.</td></tr>
   <tr><td>P39</td><td>m_haddr and i_hwdata stay stable when invalid burst.</td></tr>
-  <tr><td>P40</td><td>If i_hsize > 2, m_haddr becomes 'x' (invalid).</td></tr>
+  <tr><td>P40</td><td>If i_hsize > 3, m_haddr becomes 'x' (invalid).</td></tr>
   <tr><td>P41</td><td>m_htrans must always be one of {IDLE, WAIT_S, NONSEQ, SEQ, ERR_RESP}.</td></tr>
   <tr><td>P42</td><td>When m_hready is low, m_htrans must not change to IDLE mid-transfer.</td></tr>
   <tr><td>P43</td><td>All address/control signals must remain stable while m_hready is low.</td></tr>
